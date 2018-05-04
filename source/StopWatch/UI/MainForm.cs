@@ -115,6 +115,12 @@ namespace StopWatch
                     issue.Pause();
         }
 
+        void issue_PausedOrRemoved(object sender, EventArgs e)
+        {
+            if (this.issueControls.All(issue => issue.WatchTimer.Running == false))
+                this.Text = "JIRA StopWatch";
+        }
+
 
         void Issue_TimerReset(object sender, EventArgs e)
         {
@@ -352,6 +358,8 @@ namespace StopWatch
                 var issue = new IssueControl(this.jiraClient, this.settings);
                 issue.RemoveMeTriggered += new EventHandler(this.issue_RemoveMeTriggered);
                 issue.TimerStarted += issue_TimerStarted;
+                issue.TimerPaused += issue_PausedOrRemoved;
+                issue.RemoveMeTriggered += issue_PausedOrRemoved;
                 issue.TimerReset += Issue_TimerReset;
                 issue.Selected += Issue_Selected;
                 issue.TimeEdited += Issue_TimeEdited;

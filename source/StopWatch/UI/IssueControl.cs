@@ -87,6 +87,8 @@ namespace StopWatch
         #region public events
         public event EventHandler TimerStarted;
 
+        public event EventHandler TimerPaused;
+
         public event EventHandler TimerReset;
         #endregion
 
@@ -134,6 +136,7 @@ namespace StopWatch
             {
                 btnStartStop.Image = (System.Drawing.Image)(Properties.Resources.pause26);
                 tbTime.BackColor = Color.PaleGreen;
+                this.ParentForm.Text = $"{this.IssueKey} {tbTime.Text}";
             }
             else {
                 btnStartStop.Image = (System.Drawing.Image)(Properties.Resources.play26);
@@ -543,6 +546,8 @@ namespace StopWatch
         {
             if (WatchTimer.Running) {
                 this.WatchTimer.Pause();
+
+                this.TimerPaused?.Invoke(this, new EventArgs());
             }
             else {
                 this.WatchTimer.Start();
